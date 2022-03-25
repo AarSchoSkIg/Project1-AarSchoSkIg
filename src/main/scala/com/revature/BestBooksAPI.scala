@@ -69,12 +69,16 @@ object BestBooksAPI {
                 }
             }
         }
-        //creating Main Menu & options
+    }
 
+    //creating login method for users
+    var userValid = false
+    var passwordValid = false
+    var  finishLogIn =  false
+    var 
+    //creating Main Menu & options
+    def main(args: Array[String]): Unit = {
 
-        def main(args: Array[String]): Unit = {
-
-            mainMenu()
-        }
+        mainMenu()
     }
 }
