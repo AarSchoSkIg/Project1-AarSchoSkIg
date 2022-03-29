@@ -91,8 +91,8 @@ object UserDataBase {
 
     def checkIsAdmin(usersUserName: String): Int = {
         var prsmt = connection.prepareStatement(s"Select AmAadmin from USERS WHERE username = '$usersUserName'")
-        var validAdmin = prsmt.executeQuery()
-        if (validAdmin.getInt(1) == 1){
+        var adminAuth = prsmt.executeQuery()
+        if (adminAuth.getInt(1) == 1){
             1
 
         }else{
