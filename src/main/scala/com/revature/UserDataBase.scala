@@ -1,6 +1,6 @@
 package com.revature
 
-import java.sql.{Connection, DriverManager}
+import java.sql.{Connection, DriverManager, SQLException}
 
 object UserDataBase {
 
@@ -18,13 +18,30 @@ object UserDataBase {
         }
     }
 
-    def creationOfUsers(firstName: String, lastName: String, usersUserName: String, usersPassword: String, adminAuth: Int): Unit = {
-        val statement =  connection.createStatement()
-        val rsSet = statement.executeUpdate(s"Insert into users(FIRSTNAME, LASTNAME, USERNAME, PASSWORD, ADMIN values = ('$firstName', '$lastName', '$usersUserName', '$usersPassword', $adminAuth")
-        if (rsSet == 0){
-            println("User no exist, enter existing user.")
-        }else{
-            println("User updated to Admin, good job!")
+    def creationOfUsers(usersUserName: String, usersPassword: String, firstName: String, lastName: String, adminAuth: Int): Int = {
+        var rsSet = 0
+        val pstmt =  connection.prepareStatement(s"Insert into users(USERNAME,FIRSTNAME, LASTNAME, PASSWORD, ADMIN values = ('$firstName', '$lastName', '$usersUserName', '$usersPassword', $adminAuth")
+        try {
+            rsSet = pstmt.executeUpdate()
+            println("The user account has been created. Exuberant!!!!")
+            showAllUsers()
+            rsSet
+        }catch {
+            case e: SQLException => e.printStackTrace()
+                rsSet
+        }
+    }
+
+    def showAllUsers(): Unit = {
+        val psmt = connection.prepareStatement("SELECT DISTINCT USERNAME FROM USERS")
+        try {
+            val rsSet = psmt.executeQuery()
+            println("Users")
+            while (rsSet.next()) {
+                println(rsSet.getString("USERNAME"))
+            }
+        }  catch {
+            case e: Exception => e.printStackTrace()
         }
     }
 

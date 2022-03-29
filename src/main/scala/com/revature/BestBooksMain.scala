@@ -6,6 +6,7 @@ import org.apache.spark.sql.SparkSession
 
 import java.sql.{Connection, DriverManager}
 import java.util.Scanner
+import scala.annotation.tailrec
 
 
 object BestBooksMain {
@@ -18,6 +19,7 @@ object BestBooksMain {
     }
 
 
+    @tailrec
     def mainStartUpMenu(): Unit = {
         println("Welcome one and all to a fantastic place to get all the best news about your favorite books, all in one place!")
         println("")
@@ -74,14 +76,15 @@ object BestBooksMain {
         val newAccount = UserDataBase.creationOfUsers(firstName, lastName, userUserName, usersPassword, adminAuth)
         if (newAccount == 1){
             println("You have successfully created an account")
-            var checkifuseraccountesits = userUserName
+            var newAccountUser = userUserName
             basicUserMenu()
-        }
+        }else mainStartUpMenu()
 
     }
 
+    def adminMenu(): Unit = {
 
-    def adminMenu() = ???
+    }
 
     def basicUserMenu() = ???
 
