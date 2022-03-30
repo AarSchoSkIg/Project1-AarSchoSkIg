@@ -1,6 +1,5 @@
 package com.revature
 
-import com.revature.UserDataBase.connect
 import org.apache.spark.sql.SparkSession
 
 object Hive {
@@ -26,7 +25,10 @@ object Hive {
             "Reviews Int, Price Float(p), Year year, Genre String) Row format delimited fields terminated by ',' " +
             "partitioned by (Year) clustered by (Genre) into 2 buckets")
 
-        spark.sql("Load data Local Inpath 'C:/Users/aaron/Documents/revature-trainingFeb282022/ProjectsBigData/githubrepositoriesforProjects/Project1/bestbooks_table_data.csv' into table bestbooks_table")
+        /*spark.sql("Load data Local Inpath 'C:/Users/aaron/Documents/revature-trainingFeb282022/ProjectsBigData/githubrepositoriesforProjects/Project1/bestbooks_table_data.csv' into table bestbooks_table")
+    }
+        */
+        spark.sql("Load data Local Inpath 'bestbooks_table_data.csv' into table bestbooks_table")
     }
 
     def displayAPIQueries(selectedQuery: String): Unit = {
