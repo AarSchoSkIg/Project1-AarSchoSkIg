@@ -1,8 +1,6 @@
 package com.revature
 
-import org.apache.spark
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.SparkSession
+
 
 import java.sql.{Connection, DriverManager}
 import java.util.Scanner
@@ -51,8 +49,8 @@ object BestBooksMain {
         var usersUserName = scala.io.StdIn.readLine()
         println("Now enter in the password for your account")
         var usersPassword = scala.io.StdIn.readLine()
-        var validateLogin = UserDataBase.validateLogin(usersUserName, usersPassword)
-        if (validateLogin) {
+        var validLogin = UserDataBase.validateLogin(usersUserName, usersPassword)
+        if (validLogin) {
             amAdmin = UserDataBase.checkIsAdmin(usersUserName)
             if (amAdmin == 1) {
                 adminMenu()
@@ -209,3 +207,4 @@ object BestBooksMain {
             exit(0)
         }
  }
+
