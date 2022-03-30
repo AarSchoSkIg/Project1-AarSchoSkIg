@@ -12,6 +12,7 @@ import scala.sys.exit
 
 object BestBooksMain {
     private var existingUser = ""
+    private var selectedUser = ""
     private var amAdmin = 0
 
     def main(args: Array[String]): Unit = {
@@ -36,8 +37,8 @@ object BestBooksMain {
         }
         val option = scala.io.StdIn.readLine()
         option match {
-            case "1" => signIn()
-            case "2" => signUp()
+            case "1" => signUp()
+            case "2" => signIn()
             case "3" => exitApp()
             case _ => mainStartUpMenu()
         }
@@ -47,10 +48,10 @@ object BestBooksMain {
     def signIn(): Unit = {
         println("You have chosen option 1, to sign in. To start Please Enter in your username")
         println("Enter in username now.")
-        val usersUserName = scala.io.StdIn.readLine()
+        var usersUserName = scala.io.StdIn.readLine()
         println("Now enter in the password for your account")
-        val usersPassword = scala.io.StdIn.readLine()
-        val validateLogin = UserDataBase.validateLogin(usersUserName, usersPassword)
+        var usersPassword = scala.io.StdIn.readLine()
+        var validateLogin = UserDataBase.validateLogin(usersUserName, usersPassword)
         if (validateLogin) {
             amAdmin = UserDataBase.checkIsAdmin(usersUserName)
             if (amAdmin == 1) {
@@ -71,20 +72,20 @@ object BestBooksMain {
         println("YOu have chosen option 2, create an account to access database")
         println("This is the beginning of the form you will have ot fill out to create an account.")
         println("Please enter in your first name")
-        val firstName = scala.io.StdIn.readLine()
+        var firstName = scala.io.StdIn.readLine()
         println("Please enter in your last name")
-        val lastName = scala.io.StdIn.readLine()
+        var lastName = scala.io.StdIn.readLine()
         println("Please enter in your username")
-        val usersUserName = scala.io.StdIn.readLine()
+        var usersUserName = scala.io.StdIn.readLine()
         println("Please enter in your password")
-        val usersPassword = scala.io.StdIn.readLine()
-        val adminAuth = 0
-        val newAccount = UserDataBase.creationOfUsers(firstName, lastName, usersUserName, usersPassword, adminAuth)
+        var usersPassword = scala.io.StdIn.readLine()
+        var adminAuth = 0
+        var newAccount = UserDataBase.creationOfUsers(firstName, lastName, usersUserName, usersPassword, adminAuth)
         if (newAccount == 1) {
             println("You have successfully created an account")
             existingUser = usersUserName
-            basicUserMenu()
-        } else mainStartUpMenu()
+            mainStartUpMenu()
+        } else (mainStartUpMenu())
         signUp()
     }
 
@@ -135,10 +136,10 @@ object BestBooksMain {
     }
 
     def newAdmin(): Unit = {
-        println("Master you have selected the option to elevate a user to admin. Enter in the id of the user to elevate to admin")
-        val id = scala.io.StdIn.readLine()
-        UserDataBase.elevateUser2Admin(id)
-        println("Returning ot adminMenu")
+        println("Master you have selected the option to elevate a user to admin. Enter in the username of the user to elevate to admin")
+        selectedUser = scala.io.StdIn.readLine()
+        UserDataBase.elevateUser2Admin(selectedUser)
+        println("Returning to adminMenu")
         adminMenu()
     }
 
@@ -180,7 +181,7 @@ object BestBooksMain {
         println("Choice 5: What are the highest Priced books from which Authors during the year 2012?")
         println("Choice 6: What are the 40 lowest reviewed books from 2009-2019")
         var choiceQuery = scala.io.StdIn.readLine()
-        choiceQuery = {
+        choiceQuery match {
             case "1" => Hive.displayAPIQueries("1")
             case "2" => Hive.displayAPIQueries("2")
             case "3" => Hive.displayAPIQueries("3")
@@ -194,7 +195,7 @@ object BestBooksMain {
         println("Choice 1: What are the total number of books for each genre in the years 2009-2019?")
         println("Choice 2: What are the Top 50 highest rated books from 2009-2019?")
         var choiceQuery = scala.io.StdIn.readLine()
-        choiceQuery = {
+        choiceQuery match {
             case "1" => Hive.displayAPIQueries("1")
             case "2" => Hive.displayAPIQueries("2")
 
@@ -204,7 +205,7 @@ object BestBooksMain {
 
         def exitApp(): Unit = {
             println("Thank you for using Best Books!! Now Exiting the program")
-            UserDataBase.closeConnection()
+            UserDataBase.disconnectFromDB()
             exit(0)
         }
  }

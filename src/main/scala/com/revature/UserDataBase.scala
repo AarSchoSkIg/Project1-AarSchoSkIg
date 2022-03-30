@@ -1,30 +1,47 @@
 package com.revature
 
-import java.sql.{Connection, DriverManager, SQLException}
+import java.sql.{Connection, DriverManager, ResultSet, SQLException, Statement}
 
 object UserDataBase {
 
-    private var connection:Connection = _
+    val url = "jdbc:mysql://localhost:3306/bestbooksproject1db"
+    val driver = "com.mysql.cj.jdbc.Driver"
+    val username = "root"
+    val password = "L0nkL1nkl3!"
+    private var connection: Connection = null
+    var statmnt: Statement = null
+    var resultSet: ResultSet = null
+
     def connect(): Unit = {
-        val url = "jdbc:mysql://localhost:3306/bestbookapidb"
-        val driver = "com.mysql.cj.jdbc.Driver"
-        val username = "root"
-        val password = "L0nkL1nkl3!"
-        try {
-            Class.forName(driver)
-            connection = DriverManager.getConnection(url, username, password)
-        } catch {
-            case e: Exception => e.printStackTrace()
+        if (connection == null) {
+            try {
+                Class.forName(driver)
+                connection = DriverManager.getConnection(url, "root", "L0nkL1nkl3!")
+
+            } catch {
+                case e: Exception => e.printStackTrace()
+            }
+        } else if (connection.isClosed) {
+            try {
+                Class.forName(driver);
+                connection = DriverManager.getConnection(url, "root", "L0nkL1nkl3!");
+            }catch {
+                case e: SQLException => e.printStackTrace();
+            }
         }
     }
-
-    def creationOfUsers(usersUserName: String, usersPassword: String, firstName: String, lastName: String, adminAuth: Int): Int = {
+        def creationOfUsers(firstName: String, lastName: String, usersUserName: String, usersPassword: String, adminAuth: Int): Int = {
         var rsSet = 0
-        val pstmt =  connection.prepareStatement(s"Insert into users(,FIRSTNAME, LASTNAME, USERNAME, PSWD, ADMN values = ('$firstName', '$lastName', '$usersUserName', '$usersPassword', $adminAuth")
+        var pstmt =  connection.prepareStatement(s"Insert into users (FIRSTNAME, LASTNAME, USERNAME, PSWD, AMADMIN) Values(?, ?, ?, ?, ?)")
         try {
+            pstmt.setString(1, firstName)
+            pstmt.setString(2, lastName)
+            pstmt.setString(3, usersUserName)
+            pstmt.setString(4, usersPassword)
+            pstmt.setInt(5, adminAuth)
             rsSet = pstmt.executeUpdate()
             println("The user account has been created. Exuberant!!!!")
-            showAllUsers()
+            //showAllUsers()
             rsSet
         }catch {
             case e: SQLException => e.printStackTrace()
@@ -60,8 +77,8 @@ object UserDataBase {
 
 
     def updateUsername(newUsersUsername: String, usersUserName: String): Unit = {
-        val statement =  connection.createStatement()
-        val rsSet = statement.executeUpdate(s"UPDATE users USERNAME SET USERNAME = '$newUsersUsername' where username = '$usersUserName'")
+        val statemnt =  connection.createStatement()
+        val rsSet = statemnt.executeUpdate(s"UPDATE users USERNAME SET USERNAME = '$newUsersUsername' where username = '$usersUserName'")
         if (rsSet == 0){
             println("An Error has occurred please try again.")
         }else{
@@ -69,26 +86,26 @@ object UserDataBase {
         }
     }
     def updateLastName(newLastName: String, existingUser: String): Unit = {
-        val statement =  connection.createStatement()
-        val rsSet = statement.executeUpdate(s"UPDATE users SET LASTNAME = '$newLastName' where username = '$existingUser'")
+        val statemnt =  connection.createStatement()
+        val rsSet = statemnt.executeUpdate(s"UPDATE users SET LASTNAME = '$newLastName' where username = '$existingUser'")
         if (rsSet == 0){
             println("An Error has occurred please try again.")
         }else{
             println("Last name successfully updated")
         }
     }
-    def elevateUser2Admin(id: String): Unit = {
-        val statement =  connection.createStatement()
-        val rsSet = statement.executeUpdate(s"UPDATE users SET ADMN = 1 where UsersId = '$id'")
+    def elevateUser2Admin(selectedUser: String): Unit = {
+        val statemnt =  connection.createStatement()
+        val rsSet = statemnt.executeUpdate(s"UPDATE users SET AMADMN = 1 where username = '$selectedUser'")
         if (rsSet == 0){
             println("User no exist, enter existing user.")
         }else{
             println("User updated to Admin, good job!")
         }
     }
-    def deleteUser(id: String): Unit = {
-        val statement =  connection.createStatement()
-        val rsSet = statement.executeUpdate(s"Delete From users where ID = '$id'")
+    def deleteUser(selectedUser: String): Unit = {
+        val statemnt =  connection.createStatement()
+        val rsSet = statemnt.executeUpdate(s"Delete From users where username = '$selectedUser'")
         if (rsSet == 0){
             println("User no exist, enter existing user.")
         }else{
@@ -134,8 +151,15 @@ object UserDataBase {
     }
     //TO DO add a method for creating the master which supersedes all admins and users*/
 
-    def closeConnection(): Unit = {
-        connection.close()
+    def disconnectFromDB(): Unit = {
+        if (!connection.isClosed)
+            connection.close()
+        if (resultSet != null)
+            if (!resultSet.isClosed)
+                resultSet.close()
+        if (statmnt != null)
+            if (!statmnt.isClosed)
+                statmnt.close()
     }
 
 }
