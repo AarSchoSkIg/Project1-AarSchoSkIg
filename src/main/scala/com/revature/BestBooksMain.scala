@@ -173,12 +173,12 @@ object BestBooksMain {
     }
 
     def RealBooksMenu(): Unit = {
-        println("Select Query 1")
-        println("Select Query 2")
-        println("Select Query 3")
-        println("Select Query 4")
-        println("Select Query 5")
-        println("Select Query 6")
+        println("Choice 1: What are the total number of books for each genre in the years 2009-2019?")
+        println("Choice 2: What are the Top 50 highest rated books from 2009-2019?")
+        println("Choice 3 :What are the top 20 books based on user ratings in 2015")
+        println("Choice 4: What is the total number of Authors from 2009-2019?")
+        println("Choice 5: What are the highest Priced books from which Authors during the year 2012?")
+        println("Choice 6: What are the 40 lowest reviewed books from 2009-2019")
         var choiceQuery = scala.io.StdIn.readLine()
         choiceQuery = {
             case "1" => Hive.displayAPIQueries("1")
@@ -191,8 +191,8 @@ object BestBooksMain {
     }
 
     def booksMenu(): Unit = {
-        println("Select Query 1")
-        println("Select Query 2")
+        println("Choice 1: What are the total number of books for each genre in the years 2009-2019?")
+        println("Choice 2: What are the Top 50 highest rated books from 2009-2019?")
         var choiceQuery = scala.io.StdIn.readLine()
         choiceQuery = {
             case "1" => Hive.displayAPIQueries("1")
