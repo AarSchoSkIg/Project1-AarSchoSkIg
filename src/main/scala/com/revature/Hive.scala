@@ -20,20 +20,21 @@ object Hive {
             .getOrCreate()
 
         spark.sparkContext.setLogLevel("ERROR")
+
+        spark.sql("DROP TABLE IF EXISTS BESTBOOKS_DATA")
+        spark.sql("CREATE TABLE IF NOT EXISTS BESTBOOKS_DATA()")
     }
 
-    def displayAPIQueries(str: String): Unit = {
-        //To DO: Use something simiair to a switch statement to run/ set up each query
-        //Query 1
+    def displayAPIQueries(selectedQuery: String): Unit = {
+        //DONE: Use something similar to a switch statement to run/ set up each query
+        selectedQuery match {
+            case "1" => spark.sql().show()
+            case "2" => spark.sql().show()
+            case "3" => spark.sql().show()
+            case "4" => spark.sql().show()
+            case "5" => spark.sql().show()
+            case "6" => spark.sql().show()
 
-        //Query 2
-
-        //Query 3
-
-        //Query 4
-        //Query 5
-        //Query 6
-
-
+        }
     }
 }
