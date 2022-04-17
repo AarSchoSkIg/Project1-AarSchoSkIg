@@ -37,11 +37,11 @@ object Hive {
         //DONE: Use something similar to a switch statement to run/ set up each query
         selectedQuery match {
             case "1" => spark.sql("Select count (Distinct genre) as Genre_Types from bestbooks_table").show()
-            case "2" => spark.sql("Select Name as Book_Title, UserRating as User_Rating from bestbooks_table ordered by Desc").show(50)
+            case "2" => spark.sql("Select Name, UserRating as User_Rating from bestbooks_table order by UserRating desc").show(50)
             case "3" => spark.sql("Select Name as Book, UserRating as User_Rating from bestbooks_table where year = 2015 order by UserRating desc").show(20)
-            case "4" => spark.sql("Select Distinct count(Author) as Unique_Authors From bestbooks_table ordered by Desc").show()
-            case "5" => spark.sql("Select Name as Book_Title, Price as Price, Author as Author From bestbook_table ordered by Price Desc").show()
-            case "6" => spark.sql("Select Name as Book_Title, Reviews as Reviews from bestbooks_table ordered by Reviews Asc").show(40)
+            case "4" => spark.sql("Select Distinct count(Author) as Unique_Authors From bestbooks_table order by Author Desc").show()
+            case "5" => spark.sql("Select Name as Book_Title, Price as Price, Author as Author From bestbook_table order by Price desc").show()
+            case "6" => spark.sql("Select Name as Book_Title, Reviews as Reviews from bestbooks_table order by Reviews asc").show(40)
             case "7" => spark.sql("Select * From bestbooks_table").show(50)
 
         }
